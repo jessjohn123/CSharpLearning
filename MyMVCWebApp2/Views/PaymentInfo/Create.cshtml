@@ -1,0 +1,45 @@
+﻿@model PaymentInfo
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h2>Create</h2>
+
+<form asp-action="Create" method="post">
+    <div class="form-group">
+        <label asp-for="Name">Name:</label>
+        <input type="text" id="Name" name="Name" placeholder="Enter your card holder's name'" asp-for="Name" class="form-control">
+        <span asp-validation-for="Name" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="CardNumber">Credit Card:</label>
+        <input type="text" id="CardNumber" name="CardNumber" placeholder="Enter your card number" asp-for="CardNumber" class="form-control">
+        <span asp-validation-for="CardNumber" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="ExpireMonth">Expiration Month:</label>
+        <input type="number" id="ExpireMonth" name="ExpireMonth" placeholder="Enter the expiry month of the card" asp-for="ExpireMonth" class="form-control">
+        <span asp-validation-for="ExpireMonth" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="ExpireYear">Expiration Year:</label>
+        <input type="number" id="ExpireYear" name="ExpireYear" placeholder="Enter the expiry year of the card" asp-for="ExpireYear" class="form-control">
+        <span asp-validation-for="ExpireYear" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Email">Email Address:</label>
+        <input type="text" id="Email" name="Email" placeholder="Enter email address" asp-for="Email" class="form-control">
+        <span asp-validation-for="Email" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <button type="submit" class="btn btn-primary">Save</button>
+        <button type="reset" class="btn btn-default">Clear</button>
+    </div>
+</form>
+
+<!-- Client-side Validation -->
+@section Scripts{ 
+    @{ 
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

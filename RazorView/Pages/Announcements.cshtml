@@ -1,0 +1,31 @@
+﻿@page
+@using RazorView.Models;
+@using RazorView.Services;
+@inject IAnnouncementService service;
+
+@{ 
+    Layout = "_Layout";
+}
+
+@functions {
+    public IEnumerable<Announcements> Announcement{get; set;}
+    public async Task<IActionResult> OnGetAsync()
+    {
+        Announcement = await service.GetAnnouncementsAsync();
+        return Page();
+    }
+}
+
+<h3 class="text-center">Announcements</h3>
+@foreach(var a in Announcement)
+{
+    <div class=" row">
+        <div class="col-xs-12">
+            <h4>@a.Title</h4>
+            <p>@a.Content</p>
+        </div>
+    </div>
+}
+
+
+
