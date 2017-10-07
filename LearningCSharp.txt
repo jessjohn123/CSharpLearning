@@ -1,0 +1,430 @@
+C# - Multi-paradigm Language and OOP
+7 Version - OpenSource, Runs Windows, Mac, Linux, .NEtCore - Web API's
+.NET Standard Library - .NET Framework - WPF, ASP.NetCore
+			.NET Core - NuGet 
+			Xamarin - Android, iOS apps, croos platform
+It lies below these 3 concept- lower layer
+It defines the API's tht each platform must implement
+EF Core - Object Relational Mapper allows to talk with databse
+using C# and SQL Server Object
+
+Creating C#7 Demo App - Hello World, UserName!
+Creting ASP.Net Core Web App(enhanced Console App)Empty Type - 
+kestrel- light weight web server for ASP.Net Core app
+tht usually runs behind a reverse proxy(establshed web server- IIS)
+Every request arrives at reverse proxy - kestrel - 
+runs the app - app processes request - sends back to kestrel
+kestrel sends to reverse proxy - reverse proxyfinally responds 
+back to user
+wwwroot - Design Purpose
+Program.cs - Main(), BuildWebHost - 
+	UseStartup - name of file tht contains config details
+	Startup.cs - ConfigureServices(), Configure(app starts) - middleware pipeline
+
+Here Web API format - doesn;t include views
+Web App (Razor Pages) 
+
+C# Core
+1)String Builder - offers better performance when working with
+	multiple substrings. It maintains a list of all strings you
+	append and only concatenates them when you ask for the final
+	result
+
+2)Creating Methods - Accessors, Method Overloading, Value vs Reference, Out
+	Returnvalue MethodName MethodParam
+	char myMethod(int a, int b)
+	{
+		Method Content ....
+	}
+	Method Overloading - Same MethodName & return type but diff param
+				type.
+	Diff btw 
+	Value Type 			Reference Type
+	Stored on stack			Stored on heap
+	Derived from System.ValueType	Derived from System.Object
+	Destryed when the () that	Garbage Collected - stay as	
+	declared them goes out of 	long as they've ref on them
+	scope 
+	Copies of them is passed to 	Passed to the methods as they're
+	method				i.e. pointer to place in memory
+					where they've value
+
+3)Creating classes - Constructors, Properties, Static Members
+ClassAccessor ClassKeyword ClassName
+public		class		MyClass
+{
+	Class Content...
+}
+Access Modifier
+Public - Accessible to everyone
+Private - Only accessible by the class that defines it
+Protected - Only accessible from the class that defines it and all sub-classes
+Internal - Accessible from any code in same assembly
+
+4)Inheritance - Base/Sub Class, Override, Virtual
+System.Object is the base class for all
+
+5)Interfaces
+InterfaceAccessor InterfaceKeyword InterfaceName
+public interface IInterface
+{
+	//Interface content....
+}
+
+Inheritance - is a relationship, over-use leads to maintainance overhead
+Composition - has a relationship, composed of other classes, contains 
+		other classes.
+
+Implementing running behavior with inheritance
+		Living Organism - Run Interface
+		  |	   |		
+		Person	  Dog
+		     Robot ??? - it's not living organism, so do we create 
+				another base class - no that's making architecture 
+				more difficult, and tht's where we use composition!!!
+6)Enums 
+
+7)Structs
+Diff btw 
+	Class					Structs
+	Refernce Types				Value Types
+						No Explicit parameterless constructors
+						No Inheritance
+When to use it???
+->Small group of values with small memory footprint
+->Grouping with similar data 
+->Grouping exclusively value types
+->Don't need inheritance
+->You want to communicate with c/c++ code
+
+8)Generics
+What're generics?
+Generics are algorithms and data structures that are 
+created without knowing exact data type they'll be used
+with.
+Using System.Collection.Generic Namespace - List<T>
+Object Browser - Useful to view interfaces, generics...
+
+9)Type Checking -  as and is operator
+
+10)Garbage Collector - Managed and Unmanaged Resources/Code
+What are managed resources?
+Every part of code that is managed by the.NET core
+runtime is considered managed resources.
+
+What are unmanaged resources?
+Everything that you're responsible for cleaing up
+File handlers, database connections, open sockets etc
+C/C++ code in your c# app is unmanaged code.
+
+What is garbage collector?
+It removes unneeded objects from memory so that you 
+don't have to
+
+Person p = new Person;
+Heap - Actual Person Object
+p is in stack, a poiner tht points to where the object is, tht's heap.
+If you copy the reference to another var
+Person q = p; q also points to same object on heap
+So in case p goes out of scope, q still point to person object
+As long as there is active refernce, gc will not remove person object
+Let's say q went out of scope, the person object is removed immediately by gc
+It depends upon decision like - how much memory space is avaialble?
+Explicit Garbage Collection - System.GC.Collect();
+
+Exploring new features in C# 7
+1)Building Tuples in C# - Tuples, Named Tuples, Construction
+
+2)Pattern Matching in C# - Order is important(Switch-detailed to generic)
+What a pattern is?
+Very important when dealing with Inheritance or Polymorphism
+They help in determing the type of variable
+Perfom other type checking
+
+3)Ref Locals and Returns - 
+class Person()
+{
+	private int age;
+	public Person(int age)
+	{
+		this.age = age;
+	}
+	public ref int GetAge()
+	{
+		return age;
+	}
+}
+
+Program.cs
+Main(){
+	Person p = new Person(14);
+	int _age = p.GetAge();
+	ref int _ageRef = ref p.GetAge();
+	_age++;
+	Console.WriteLine(_age);  // This will print 14 and not 15
+	_ageRef++;
+	Console.WriteLine(_ageRef); // This will print 15 as it sent out as ref
+}
+
+What u can't dow with ref locals and returns
+->Cannot return local var's
+->No ref returns from async method
+->Assign a regular value to ref local
+
+4)Inline out var's - Program.cs Calculate()
+
+5)Local Functions - see Aliens class
+
+6)Expression Bodied Members - Constructors, Finalizers, Getter-Setters
+public string FullName => $"{FirstName} {LastName}";
+public Person(string fName, string lName, int age):init(fName, lName, age);
+~Person() => Console.WriteLine("Finalizing Person");
+public int Age
+{
+	get => _age;
+	set => _age = value;
+}
+
+7)Throw Exceptions
+Person.cs
+public Person(string fName, string lName, int age, IRun runer)
+{
+	/*if(runner == null)
+	{
+		throw new ArgumentException(runner);
+	}
+	Runner = runner;*/
+	//Using colesion operator
+	Runner = runner ?? throw new ArgumentException(runner);
+}
+Program.cs
+try{
+	Person p = new Person("John", "Smith", 45, null);
+	p.Run(2);
+}catch(ArgumentNullException e){
+	Console.WriteLine("Runner cannot be null");
+}catch(Exception e){
+	Console.Writeline("Oops something went wrong);
+}
+
+Output - Runner cannot be null
+
+8)Generalized Async Return Types - void, Task, Task<T>
+System.Threading.Tasks;
+private static async Task<bool>getBoolOldWayAsync()
+{
+        await Task.Delay(3000);
+        return false;
+}
+private static async ValueTask<bool>getBoolAsync()
+{
+       await Task.Delay(3000);
+       return true;
+}
+
+Why use ValueTask<T>? - its struct, not reference, faster to initialize!
+
+9)Digit Separator -
+	int myBinary = 0b0010;
+	C.WL(myBinary);
+	Output = 2 in Binary
+	int myBinary = 0b1000_0010;
+	C.WL(myBinary);
+	Output = 130 in Binary
+
+Exploring new features of ASP.NET Core 2.0 with .NET Frameowrk
+->Supports Bigger API Surface
+->Meta Package reference other packages under one single package
+->New WebHost Configuration
+	Net Core 1.0/1.1
+	Program.cs
+	public static void Main(string [] args)
+	{
+		// Assets and javascript files
+		var host = new WebHostBuilder();
+		.UseKestrel()
+		.UseContentRoot(Directory.GetCurrentDirectory())
+		.UseISSIntegration()
+		.UseStartup<startup>()
+		.UseApplicationInsights()
+		.Build();
+
+		host.Run();
+	}	
+	
+	Net Core 2.0
+	Program.cs
+		public static void Main(string [] args)
+		{
+			BuildWebHost(args).Run();
+		}
+			
+		public static IWebHost BuildWebHost(string []args) =>
+			WebHost.CreateDefaultBuilder(args)
+				.UseStartup<startup>()
+				.Build();
+SPA Templates - starting template: more front-end
+Improved identity and authentication
+Razor pages - views that can stand alone without being backed by a controller or view model
+1)Application Startup - Constructor, ConfigureService, Configure, Basic Configuration
+ConfigureService - Registering the service,db context or third party service
+Configure - Calling the service as a method parameter
+Basic Config -  Once the service is registered, you can tailor its behavior 
+by adding an attribute in appsettings.json and call it in Configure when the 
+request is send by the server
+
+2)Middleware
+Structure of Middleware
+Logic - Wait for next middleware - Logic
+
+Middleware Pipeline
+Middleware1 - Middleware2 - Middleware3
+Every single request will pass through the pipeline top to bottom
+Every single response will pass through the pipeline in reverse order
+If one of the middleware decides no to go to other one and send 
+back control to prev middleware, this process is called short-circuit 
+*Do not modify HTTPResponse after response has started!
+Use HttpResponse.HasStarted Property
+
+Middleware in startup - Error Handling Middleware, Next to cal other Middleware
+
+Moving Middleware in separate file - Custom Error Handling Middleware
+
+3)Routing and Views
+Default routing templates
+Home About Contact - Name of the Controller and Name of the Action
+Explicit route - using ViewData["Route"], you specify the model u want to generate view for
+Attribute Routing - you pass the attribute inside View() in Controller
+View Selection - Creating View, Printing out the list
+Basic Razor Syntax - starts with @
+Razor is an implementing engine that allows to use html with c#
+
+4)Dependency Injection
+What is Dependency Injection?
+Increases projects maintability, Testability and Flexibility
+Reduces number of time you instantiate new class
+Without DI - 
+class classA
+{
+	private int _a;
+	public classA(int a)
+	{
+		_a = a;
+	}
+	public void DoSomething() => Console.WriteLine("Do Something");
+}
+class classB
+{
+	private classA _a;
+	public classB(classA _a) -> Tight Coupling
+	{
+		_a = new classA(1);
+	}	
+	public void DoSomething(){
+		_a.DoSomething();
+	}
+}
+With DI -LooseCoupling(IoC Container)
+interface IClassA
+{
+	void DoSomething();
+}
+class classA : IClassA
+{
+	private int _a;
+	public classA(int a)
+	{	
+		_a = a;
+	}
+	public void DoSomething() => Console.WriteLine("Do Something");
+}
+class classB
+{
+	private IClassA _a;
+	public classB(IClassA a) -> Tight Coupling
+	{
+		_a = a;
+	}	
+	public void DoSomething(){
+		_a.DoSomething();
+	}
+}
+
+How to utilize interface to make most out of DI?
+How to register your service?
+Service Lifetime
+Singleton - One instance in the whole app
+Transient - Created every time it's requested
+Scoped - Created for each request
+
+5)Model Validation
+How to use attributes to validate your models
+How to take advantages of the built-in client-side validation
+How to protect from overposting
+How to defend your application from cross-site request forgery
+
+6)Identity
+How to enable user authentication in your web app
+Identity System - Basic authentication funtionality
+Authentication with external tools - Fb, Twitter, Google
+Email Confirmation
+Change password functionality
+Two-factor authentication
+
+How to add fields to user model?
+Adding fields to the RegisterViewModel.cs - FirstName, LastName, Age
+Adding it to AccountController Register()
+Adding the fields to the Register.cshtml
+
+How to only allow authenticated user to view a page?
+Add Authorize attribute to About Action in Home Controller
+
+7)Razor Pages
+A page that is an MVC action by itself
+Does not need a controller
+A quick way to create screens and pages with limited logic
+No need to explicitly define routes
+Razor pages are enabled in every MVC Project
+
+Pages without PageModel files run faster
+CSRF Protection is enabled
+
+Exploring Entity Framework Core
+1)What is O/RM
+2)The database context
+3)Migrations
+4)Creating CRUD Service
+
+Advanced Programming with C# 7
+1)Delegates and Lambda Expression
+The observer pattern
+Log Machine Temperature every time it changes - ConsoleLogger, FileLogger, WebService 
+Observable(Machine)Every time even occurs - 
+Observer(ConsoleLogger, FileLogger, WebService)Registering with Observable
+Observer triggers the event
+How to create delegate
+How to write lambda expressions
+
+2)Threads and Parallelism
+How to use threads and the ThreadPool
+System.Threading???
+Put Long running tasks on secondary threads so that 
+main thread can remain in response.
+ThreadPool???
+Collection of threads that have bee configured for you by the framework
+and they're on stand by for new operation. Every time you want to conduct
+new operation u don;t have to create new thread u can just use thread pool
+to queue in the threads
+
+What is the Task Parallel Library
+asynchronous operations around a concept of task
+  
+3)LINQ
+How to use LINQ with generic collections
+from where select order
+
+What is deferred execution
+IEnumerable doesn;t contain anythng until iteration occurs
+Same query multiple times - u don;t want to iterate over again and again if data source 
+changes.
+4)Extension Methods
